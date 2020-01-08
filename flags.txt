@@ -1,0 +1,15 @@
+BehaviourFlags>
+BF_CanUseCover
+BF_CanUseVehicles 
+BF_CanDoDrivebys 
+BF_CanLeaveVehicle 
+BF_UseProximityFiringRate 
+BF_CanTauntInVehicle 
+BF_CanUsePeekingVariations 
+BF_CanCommandeerVehicles 
+BF_MaintainMinDistanceToTarget 
+BF_CanUseDynamicStrafeDecisions 
+BF_DisableBlockFromPursueDuringVehicleChase 
+BF_DisableSpinOutDuringVehicleChase 
+BF_DisableCruiseInFrontDuringBlockDuringVehicleChase
+</BehaviourFlags
