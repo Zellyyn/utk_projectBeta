@@ -1,9 +1,11 @@
 ESX = nil
 local info = {stage = 0, style = 0}
+
 RegisterServerEvent("utk_pb:updateUTK")
 RegisterServerEvent("utk_pb:upStage")
 RegisterServerEvent("utk_pb:lock")
 RegisterServerEvent("utk_pb:handlePlayers")
+RegisterServerEvent("utk_pb:blackout")
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
@@ -38,18 +40,42 @@ AddEventHandler("utk_pb:upStage", function(value)
     end
 end)
 
-AddEventHandler("utk_pb:handlePlayers", function(table)
+AddEventHandler("utk_pb:lock", function()
     local xPlayers = ESX.GetPlayers()
-    print("1")
+
     for i = 1, #xPlayers, 1 do
-        local xPlayer = ESX.GetPlayerFromId(xPlayers[i])
-        print("2")
-        if xPlayer.job.name == "police" then -- you may want to add off-duty police job here too if you use it
-            TriggerClientEvent("utk_pb:handlePolice", xPlayers[i], table)
-            print("3")
-        else
-            TriggerClientEvent("utk_pb:handleOthers", xPlayers[i], table)
-            print("4")
+        if xPlayers[i] ~= source then
+            TriggerClientEvent("utk_pb:lock", xPlayers[i])
         end
     end
 end)
+
+AddEventHandler("utk_pb:handlePlayers", function()
+    local xPlayers = ESX.GetPlayers()
+
+    for i = 1, #xPlayers, 1 do
+        TriggerClientEvent("utk_pb:handlePlayers_c", xPlayers[i])
+    end
+end)
+
+AddEventHandler("utk_pb:blackout", function(status)
+    local xPlayers = ESX.GetPlayers()
+
+    for i = 1, #xPlayers, 1 do
+        TriggerClientEvent("utk_pb:power", xPlayers[i], status)
+    end
+    BlackoutTimer()
+end)
+
+function BlackoutTimer()
+    local timer = 30
+    repeat
+        Citizen.Wait(1000)
+        timer = timer - 1
+    until timer == 0
+    local xPlayers = ESX.GetPlayers()
+
+    for i = 1, #xPlayers, 1 do
+        TriggerClientEvent("utk_pb:power", xPlayers[i], false)
+    end
+end
